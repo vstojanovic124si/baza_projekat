@@ -1,6 +1,5 @@
 module com.example.baze_podataka {
     requires javafx.controls;
-    requires javafx.fxml;
     requires java.sql;
 
     opens com.example.baze_podataka to javafx.fxml;
