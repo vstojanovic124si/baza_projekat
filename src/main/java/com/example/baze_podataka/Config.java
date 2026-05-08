@@ -8,10 +8,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Config {
-
     private static Properties properties;
     private static Connection connection;
-    // jdbc:mysql://localhost:3306/hemijsko_istrazivanje
     public static void connect(String host, String port, String db, String user, String password) {
         String url = "jdbc:mysql://" + host + ":" + port + "/" + db;
         System.out.println("URL " + url);
@@ -57,6 +55,5 @@ public class Config {
     }
 
     private Config() {
-
     }
 }

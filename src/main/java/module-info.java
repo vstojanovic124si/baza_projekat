@@ -1,6 +1,7 @@
 module com.example.baze_podataka {
     requires javafx.controls;
     requires java.sql;
+    requires jbcrypt;
 
     opens com.example.baze_podataka to javafx.fxml;
     exports com.example.baze_podataka;
