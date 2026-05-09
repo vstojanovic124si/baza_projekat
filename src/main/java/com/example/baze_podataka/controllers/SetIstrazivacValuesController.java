@@ -1,20 +1,12 @@
 package com.example.baze_podataka.controllers;
 
-import com.example.baze_podataka.models.Eksperiment;
 import com.example.baze_podataka.models.IstrazivacDto;
-import com.example.baze_podataka.models.VrstaEksperimenta;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.LightBase;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLOutput;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SetIstrazivacValuesController {
     private TableView<IstrazivacDto> tvIstrazivac;
