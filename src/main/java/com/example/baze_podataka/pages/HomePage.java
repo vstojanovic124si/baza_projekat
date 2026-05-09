@@ -73,6 +73,8 @@ public class HomePage extends Stage {
         SetEksperimentValuesController setEksperimentValuesController = new SetEksperimentValuesController(tvEksperiment);
         setEksperimentValuesController.runQuery(Config.getConnection());
         tvEksperiment.getSelectionModel().selectedItemProperty().addListener(new SetSessionValuesController(tvEksperiment, tvSesija));
+
+        this.setTitle("Home page");
         this.setScene(new Scene(root, 1000, 800));
 
     }

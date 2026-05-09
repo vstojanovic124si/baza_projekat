@@ -40,6 +40,7 @@ public class LoginPage {
             RegisterPage registerPage = new RegisterPage();
             Stage stage = (Stage) btnGoToRegisterPage.getScene().getWindow();
             stage.setScene(registerPage.getScene());
+            stage.setTitle("Home page");
         });
 
         VBox layout = new VBox(10);

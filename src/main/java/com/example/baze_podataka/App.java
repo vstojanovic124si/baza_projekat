@@ -11,7 +11,7 @@ public class App extends Application {
 
         primaryStage.setScene(loginPage.getScene());
 
-        primaryStage.setTitle("App Login");
+        primaryStage.setTitle("Hemijski eksperimenti");
         primaryStage.show();
     }
 
