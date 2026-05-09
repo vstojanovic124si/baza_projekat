@@ -1,6 +1,7 @@
 package com.example.baze_podataka.pages;
 
 import com.example.baze_podataka.Config;
+import com.example.baze_podataka.controllers.ButtonLaboratorijaController;
 import com.example.baze_podataka.controllers.SetEksperimentValuesController;
 import com.example.baze_podataka.controllers.SetSessionValuesController;
 import com.example.baze_podataka.models.Eksperiment;
@@ -73,6 +74,9 @@ public class HomePage extends Stage {
         SetEksperimentValuesController setEksperimentValuesController = new SetEksperimentValuesController(tvEksperiment);
         setEksperimentValuesController.runQuery(Config.getConnection());
         tvEksperiment.getSelectionModel().selectedItemProperty().addListener(new SetSessionValuesController(tvEksperiment, tvSesija));
+
+
+        btnPrikazLaboratorija.setOnAction(new ButtonLaboratorijaController());
 
         this.setTitle("Home page");
         this.setScene(new Scene(root, 1000, 800));
