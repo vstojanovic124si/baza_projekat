@@ -29,10 +29,8 @@ public class LoginPage {
             LoginUserController controller = new LoginUserController();
             boolean success = controller.login(usernameField.getText(), passwordField.getText());
             if(success) {
-                DashboardPage dashboardPage = new DashboardPage();
                 Stage stage = (Stage) loginButton.getScene().getWindow();
-                stage.setScene(dashboardPage.getScene(usernameField.getText())
-                );
+                stage.setScene(new HomePage().getScene());
             } else {
                 messageLabel.setText("Invalid credentials.");
             }

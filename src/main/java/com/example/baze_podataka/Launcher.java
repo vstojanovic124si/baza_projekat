@@ -24,14 +24,11 @@ public class Launcher {
 
     private void setUp(String... args) {
         Config.loadProperties(args[0]);
-        System.out.println("Ucitano");
         String host = Config.getPropertyValue("host", "");
         String port = Config.getPropertyValue("port", "");
         String db = Config.getPropertyValue("db", "");
         String user = Config.getPropertyValue("user", "");
         String password = Config.getPropertyValue("password", "");
-
-        System.out.printf("%s %s %s %s %s\n", host, port, db, user, password);
         Config.connect(host, port, db, user, password);
     }
 

@@ -12,8 +12,6 @@ public class Config {
     private static Connection connection;
     public static void connect(String host, String port, String db, String user, String password) {
         String url = "jdbc:mysql://" + host + ":" + port + "/" + db;
-        System.out.println("URL " + url);
-        System.out.println("User " + user +  " password " + password);
         try {
             connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {

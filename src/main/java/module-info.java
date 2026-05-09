@@ -7,4 +7,6 @@ module com.example.baze_podataka {
     exports com.example.baze_podataka;
     exports com.example.baze_podataka.pages;
     opens com.example.baze_podataka.pages to javafx.fxml;
+
+    opens com.example.baze_podataka.models to javafx.base;
 }
