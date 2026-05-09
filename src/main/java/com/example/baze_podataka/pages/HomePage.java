@@ -22,6 +22,7 @@ import java.util.Date;
 
 public class HomePage extends Stage {
     private Button btnPrikazLaboratorija = new Button("Prikaz Laboratorija");
+    private Button btnPrikazIstrazivaca = new Button("Prikaz Istrazivaca");
     private Button btnIzmenaSesije = new Button("Izmena sesije");
     private TableView<Eksperiment> tvEksperiment = new TableView<>();
     private TableView<SessionDto> tvSesija = new TableView<>();
@@ -56,6 +57,15 @@ public class HomePage extends Stage {
         tcSessionVremePocetka.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         tcSessionVremeZavrsetka.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 
+        btnPrikazIstrazivaca.setOnAction(e -> {
+            IstrazivaciPage istrazivaciPage = new IstrazivaciPage();
+            Stage stage = (Stage) btnPrikazIstrazivaca.getScene().getWindow();
+            stage.setScene(istrazivaciPage.getScene());
+            stage.setTitle("Prikaz Istrazivaca");
+        });
+
+
+
         tvSesija.getColumns().add(tcSessionId);
         tvSesija.getColumns().add(tcSesijaDatum);
         tvSesija.getColumns().add(tcSessionVremePocetka);
@@ -65,7 +75,7 @@ public class HomePage extends Stage {
 
         this.root.setRight(this.tvSesija);
 
-        VBox vb1 = new VBox(10, this.btnIzmenaSesije, this.btnPrikazLaboratorija);
+        VBox vb1 = new VBox(10, this.btnIzmenaSesije, this.btnPrikazLaboratorija, btnPrikazIstrazivaca);
         vb1.setAlignment(Pos.CENTER);
         vb1.setPadding(new Insets(10));
 
@@ -76,8 +86,5 @@ public class HomePage extends Stage {
 
         this.setTitle("Home page");
         this.setScene(new Scene(root, 1000, 800));
-
     }
-
-
 }
