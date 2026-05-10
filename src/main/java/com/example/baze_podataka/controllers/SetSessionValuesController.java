@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 
 import java.sql.*;
-import java.util.EventListener;
 
 public class SetSessionValuesController implements ChangeListener {
     private TableView<Eksperiment> tvEksperimenti;
@@ -21,13 +20,16 @@ public class SetSessionValuesController implements ChangeListener {
         this.tvSesije = tvSesije;
     }
 
-    public void runQuery(Connection connection) {
-
-    }
-
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+        runQuery();
+    }
+
+    private void runQuery(){
         try {
+            Eksperiment eksperiment = tvEksperimenti.getSelectionModel().getSelectedItem();
+            if(eksperiment == null)return;
+
             String query = "SELECT * FROM sesija WHERE eksperiment_id = ?";
             PreparedStatement preparedStatement = Config.getConnection().prepareStatement(query);
             preparedStatement.setInt(1, tvEksperimenti.getSelectionModel().getSelectedItem().getEksperimentId());
@@ -40,7 +42,7 @@ public class SetSessionValuesController implements ChangeListener {
                 Date datum = rs.getDate("datum");
                 Time vremePocetka = rs.getTime("vreme_pocetka");
                 Time vremeZavrsetka = rs.getTime("vreme_zavrsetka");
-                SessionDto sesija = new SessionDto(sesija_id, datum, vremePocetka, vremeZavrsetka);
+                SessionDto sesija = new SessionDto(sesija_id, datum, vremePocetka, vremeZavrsetka, laboratorija_id);
                 sesije.add(sesija);
             }
             tvSesije.setItems(sesije);

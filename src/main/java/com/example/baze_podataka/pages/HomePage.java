@@ -13,7 +13,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -42,20 +41,29 @@ public class HomePage extends Stage {
         tcCiljeviIstrazivanja.setCellValueFactory(new PropertyValueFactory<>("ciljeviIstrazivanja"));
         tcVrstaEksperimenta.setCellValueFactory(new PropertyValueFactory<>("nazivVrste"));
 
-        tvEksperiment.getColumns().add(tcId);
-        tvEksperiment.getColumns().add(tcNaziv);
-        tvEksperiment.getColumns().add(tcCiljeviIstrazivanja);
-        tvEksperiment.getColumns().add(tcVrstaEksperimenta);
-
         TableColumn<SessionDto, Integer> tcSessionId = new TableColumn<>("Sesija ID");
+        TableColumn<SessionDto, Integer> tcLaboratoryId= new TableColumn<>("Laboratorija ID");
         TableColumn<SessionDto, Date> tcSesijaDatum = new TableColumn<>("Datum");
         TableColumn<SessionDto, Time> tcSessionVremePocetka = new TableColumn<>("Vreme pocetka");
         TableColumn<SessionDto, Time> tcSessionVremeZavrsetka = new TableColumn<>("Vreme zavrsetka");
 
         tcSessionId.setCellValueFactory(new PropertyValueFactory<>("sessionId"));
+        tcLaboratoryId.setCellValueFactory(new PropertyValueFactory<>("laboratoryId"));
         tcSesijaDatum.setCellValueFactory(new PropertyValueFactory<>("date"));
         tcSessionVremePocetka.setCellValueFactory(new PropertyValueFactory<>("startTime"));
         tcSessionVremeZavrsetka.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+
+        tvEksperiment.getColumns().addAll(tcId, tcNaziv, tcCiljeviIstrazivanja, tcVrstaEksperimenta);
+        tvSesija.getColumns().addAll(tcSessionId, tcLaboratoryId, tcSesijaDatum, tcSessionVremePocetka, tcSessionVremeZavrsetka);
+
+
+        VBox vb1 = new VBox(10, this.btnIzmenaSesije, this.btnPrikazLaboratorija, btnPrikazIstrazivaca);
+        vb1.setAlignment(Pos.CENTER);
+        vb1.setPadding(new Insets(10));
+        SetEksperimentValuesController setEksperimentValuesController = new SetEksperimentValuesController(tvEksperiment);
+        setEksperimentValuesController.runQuery(Config.getConnection());
+        tvEksperiment.getSelectionModel().selectedItemProperty().addListener(new SetSessionValuesController(tvEksperiment, tvSesija));
+
 
         btnPrikazIstrazivaca.setOnAction(e -> {
             IstrazivaciPage istrazivaciPage = new IstrazivaciPage();
@@ -72,27 +80,41 @@ public class HomePage extends Stage {
         });
 
         btnIzmenaSesije.setOnAction(e -> {
+            if(tvSesija.getItems().isEmpty() || tvSesija.getSelectionModel().getSelectedItem() == null) {
+                return ;
+            }
+            SessionDto selectedSesija =  tvSesija.getItems().get(tvSesija.getSelectionModel().getSelectedIndex());
 
+            Stage stage = (Stage) btnIzmenaSesije.getScene().getWindow();
+            Scene homeScene = stage.getScene();
+
+            IzmenaSesijePage izmenaSesijePage = new IzmenaSesijePage(selectedSesija);
+
+            stage.setScene(izmenaSesijePage.getScene());
+            stage.setTitle("Izmena Sesije");
+
+            izmenaSesijePage.getBtnHomePageBack().setOnAction(event -> {
+                Eksperiment prethodnoSelektovan = tvEksperiment.getSelectionModel().getSelectedItem();
+
+                setEksperimentValuesController.runQuery(Config.getConnection());
+
+                if (prethodnoSelektovan != null) {
+                    for (Eksperiment eks : tvEksperiment.getItems()) {
+                        if (eks.getEksperimentId() == prethodnoSelektovan.getEksperimentId()) {
+                            tvEksperiment.getSelectionModel().select(eks);
+                            break;
+                        }
+                    }
+                }
+
+                stage.setScene(homeScene);
+                stage.setTitle("Home page");
+            });
         });
 
-        tvSesija.getColumns().add(tcSessionId);
-        tvSesija.getColumns().add(tcSesijaDatum);
-        tvSesija.getColumns().add(tcSessionVremePocetka);
-        tvSesija.getColumns().add(tcSessionVremeZavrsetka);
-
-        this.root.setCenter(this.tvEksperiment);
-
-        this.root.setRight(this.tvSesija);
-
-        VBox vb1 = new VBox(10, this.btnIzmenaSesije, this.btnPrikazLaboratorija, btnPrikazIstrazivaca);
-        vb1.setAlignment(Pos.CENTER);
-        vb1.setPadding(new Insets(10));
-
-        this.root.setLeft(vb1);
-        SetEksperimentValuesController setEksperimentValuesController = new SetEksperimentValuesController(tvEksperiment);
-        setEksperimentValuesController.runQuery(Config.getConnection());
-        tvEksperiment.getSelectionModel().selectedItemProperty().addListener(new SetSessionValuesController(tvEksperiment, tvSesija));
-
+        root.setCenter(this.tvEksperiment);
+        root.setRight(this.tvSesija);
+        root.setLeft(vb1);
         this.setTitle("Home page");
         this.setScene(new Scene(root, 1000, 800));
     }

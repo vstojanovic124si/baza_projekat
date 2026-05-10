@@ -5,15 +5,17 @@ import java.util.Date;
 
 public class SessionDto {
     private int sessionId;
+    private int laboratoryId;
     private Date date;
     private Time startTime;
     private Time endTime;
 
-    public SessionDto(int sessionId, Date date, Time startTime, Time endTime) {
+    public SessionDto(int sessionId, Date date, Time startTime, Time endTime, int laboratoryId) {
         this.sessionId = sessionId;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.laboratoryId = laboratoryId;
     }
 
     public int getSessionId() {
@@ -46,5 +48,13 @@ public class SessionDto {
 
     public void setEndTime(Time endTime) {
         this.endTime = endTime;
+    }
+
+    public int getLaboratoryId() {
+        return laboratoryId;
+    }
+
+    public void setLaboratoryId(int laboratoryId) {
+        this.laboratoryId = laboratoryId;
     }
 }
