@@ -20,6 +20,7 @@ public class IstrazivaciPage extends Stage {
     private TableView<EksperimentIzvodjacIzvDto> tvEksperimentIzvodjacIzv = new TableView<>();
     private TableView<EksperimentTeorijaDizajnerDto> tvEksperimentEksTeoDiz = new TableView<>();
     private BorderPane root = new BorderPane();
+    private Button btnHomePageBack = new Button("Nazad na home page");
 
     public IstrazivaciPage() {
 
@@ -62,9 +63,6 @@ public class IstrazivaciPage extends Stage {
         tcTeorijaNaziv.setCellValueFactory(new PropertyValueFactory<>("teorijaNaziv"));
         tcTeorijaOpis.setCellValueFactory(new PropertyValueFactory<>("teorijaOpis"));
 
-        SetEksTeoDizValuesController setEksTeoDizValuesController =
-                new SetEksTeoDizValuesController(tvIstrazivac, tvEksperimentEksTeoDiz);
-
         tvIstrazivac.getSelectionModel().selectedItemProperty()
                 .addListener(new SetEksTeoDizValuesController(tvIstrazivac, tvEksperimentEksTeoDiz));
 
@@ -79,9 +77,14 @@ public class IstrazivaciPage extends Stage {
         root.setLeft(tvIstrazivac);
         root.setCenter(tvEksperimentEksTeoDiz);
         root.setRight(tvEksperimentIzvodjacIzv);
+        root.setBottom(btnHomePageBack);
         SetIstrazivacValuesController setIstrazivacValuesController = new SetIstrazivacValuesController(tvIstrazivac);
         setIstrazivacValuesController.runQuery(Config.getConnection());
 
         setScene(new Scene(root, 1500, 800));
+    }
+
+    public Button getBtnHomePageBack() {
+        return btnHomePageBack;
     }
 }

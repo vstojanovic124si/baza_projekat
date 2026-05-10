@@ -60,11 +60,20 @@ public class HomePage extends Stage {
         btnPrikazIstrazivaca.setOnAction(e -> {
             IstrazivaciPage istrazivaciPage = new IstrazivaciPage();
             Stage stage = (Stage) btnPrikazIstrazivaca.getScene().getWindow();
+            Scene homeScene = stage.getScene();
+
             stage.setScene(istrazivaciPage.getScene());
             stage.setTitle("Prikaz Istrazivaca");
+
+            istrazivaciPage.getBtnHomePageBack().setOnAction(event ->{
+                stage.setScene(homeScene);
+                stage.setTitle("Home Page");
+            });
         });
 
+        btnIzmenaSesije.setOnAction(e -> {
 
+        });
 
         tvSesija.getColumns().add(tcSessionId);
         tvSesija.getColumns().add(tcSesijaDatum);
