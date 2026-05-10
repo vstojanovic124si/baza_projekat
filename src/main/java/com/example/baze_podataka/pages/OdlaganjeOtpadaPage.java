@@ -9,10 +9,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class OdlaganjeOtpadaPage extends Stage {
     private Button btnHomePageBack = new Button("Nazad na home page");
+    private Button btnDodajOdlaganje = new Button("Dodaj odlaganje");
     private BorderPane root = new  BorderPane();
     private TableView<OdlaganjeOtpadaDto> tvOdlaganjeOtpada = new TableView<>();
 
@@ -33,8 +35,26 @@ public class OdlaganjeOtpadaPage extends Stage {
 
         odlaganjeOtpadaValuesController.runQuery(Config.getConnection());
 
+        btnDodajOdlaganje.setOnAction((event) -> {
+            DodajOdlaganjePage dodajOdlaganjePage =
+                    new DodajOdlaganjePage();
+
+            Stage stage = (Stage) btnHomePageBack.getScene().getWindow();
+            Scene odlaganjeOtpadaScene = stage.getScene();
+            stage.setScene(dodajOdlaganjePage.getScene());
+            stage.setTitle("Dodaj odlaganje");
+
+            dodajOdlaganjePage.getBtnOdlaganjeOtpadaBack().setOnAction(e -> {
+                odlaganjeOtpadaValuesController.runQuery(Config.getConnection());
+               stage.setScene(odlaganjeOtpadaScene);
+               stage.setTitle("Odlaganje hemijskog otpada izvestaj");
+            });
+        });
+
         root.setCenter(tvOdlaganjeOtpada);
-        root.setBottom(btnHomePageBack);
+        HBox hBox = new HBox();
+        hBox.getChildren().addAll(btnHomePageBack, btnDodajOdlaganje);
+        root.setBottom(hBox);
         setScene(new Scene(root, 1500, 800));
     }
 

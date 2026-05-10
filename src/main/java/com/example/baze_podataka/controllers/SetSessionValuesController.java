@@ -30,14 +30,13 @@ public class SetSessionValuesController implements ChangeListener {
             Eksperiment eksperiment = tvEksperimenti.getSelectionModel().getSelectedItem();
             if(eksperiment == null)return;
 
-            String query = "SELECT * FROM sesija WHERE eksperiment_id = ?";
+            String query = "SELECT sesija_id, laboratorija_id, datum, vreme_pocetka, vreme_zavrsetka FROM sesija WHERE eksperiment_id = ?";
             PreparedStatement preparedStatement = Config.getConnection().prepareStatement(query);
             preparedStatement.setInt(1, tvEksperimenti.getSelectionModel().getSelectedItem().getEksperimentId());
             ResultSet rs = preparedStatement.executeQuery();
             ObservableList<SessionDto> sesije = FXCollections.observableArrayList();
             while(rs.next()){
                 int sesija_id = rs.getInt("sesija_id");
-                int eksperiment_id = rs.getInt("eksperiment_id");
                 int laboratorija_id = rs.getInt("laboratorija_id");
                 Date datum = rs.getDate("datum");
                 Time vremePocetka = rs.getTime("vreme_pocetka");
