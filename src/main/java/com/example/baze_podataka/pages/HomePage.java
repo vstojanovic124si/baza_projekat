@@ -23,6 +23,7 @@ public class HomePage extends Stage {
     private Button btnPrikazLaboratorija = new Button("Prikaz Laboratorija");
     private Button btnPrikazIstrazivaca = new Button("Prikaz Istrazivaca");
     private Button btnIzmenaSesije = new Button("Izmena sesije");
+    private Button btnOdlaganjeOtpada = new Button("Izvestaj odlaganja");
     private TableView<Eksperiment> tvEksperiment = new TableView<>();
     private TableView<SessionDto> tvSesija = new TableView<>();
 
@@ -57,7 +58,7 @@ public class HomePage extends Stage {
         tvSesija.getColumns().addAll(tcSessionId, tcLaboratoryId, tcSesijaDatum, tcSessionVremePocetka, tcSessionVremeZavrsetka);
 
 
-        VBox vb1 = new VBox(10, this.btnIzmenaSesije, this.btnPrikazLaboratorija, btnPrikazIstrazivaca);
+        VBox vb1 = new VBox(10, this.btnIzmenaSesije, this.btnPrikazLaboratorija, btnPrikazIstrazivaca, btnOdlaganjeOtpada);
         vb1.setAlignment(Pos.CENTER);
         vb1.setPadding(new Insets(10));
         SetEksperimentValuesController setEksperimentValuesController = new SetEksperimentValuesController(tvEksperiment);
@@ -65,6 +66,8 @@ public class HomePage extends Stage {
         tvEksperiment.getSelectionModel().selectedItemProperty().addListener(new SetSessionValuesController(tvEksperiment, tvSesija));
 
 
+
+        /// butoni
         btnPrikazIstrazivaca.setOnAction(e -> {
             IstrazivaciPage istrazivaciPage = new IstrazivaciPage();
             Stage stage = (Stage) btnPrikazIstrazivaca.getScene().getWindow();
@@ -111,6 +114,23 @@ public class HomePage extends Stage {
                 stage.setTitle("Home page");
             });
         });
+
+
+        btnOdlaganjeOtpada.setOnAction(e -> {
+            OdlaganjeOtpadaPage odlaganjeOtpadaPage = new OdlaganjeOtpadaPage();
+
+            Stage stage = (Stage) btnIzmenaSesije.getScene().getWindow();
+            Scene homeScene = stage.getScene();
+            stage.setScene(odlaganjeOtpadaPage.getScene());
+
+            stage.setTitle("Odlaganje hemijskog otpada izvestaj");
+
+            odlaganjeOtpadaPage.getBtnHomePageBack().setOnAction(event ->{
+                stage.setScene(homeScene);
+                stage.setTitle("Home page");
+            });
+        });
+
 
         root.setCenter(this.tvEksperiment);
         root.setRight(this.tvSesija);

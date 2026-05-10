@@ -17,7 +17,6 @@ public class SetIstrazivacValuesController {
 
     public void runQuery(Connection connection){
         try {
-            System.out.println("START QUERY");
             String query = "SELECT * from istrazivac";
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
@@ -31,7 +30,6 @@ public class SetIstrazivacValuesController {
                 IstrazivacDto istrazivac = new IstrazivacDto(id, ime, prezime, klasifikacija, sposobnosti);
                 istrazivaci.add(istrazivac);
             }
-            System.out.println("ROW FOUND");
             tvIstrazivac.setItems(istrazivaci);
         }
         catch (Exception e){
