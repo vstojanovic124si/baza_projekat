@@ -13,11 +13,11 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class SetIzvodjacEkspIzvodjenjeController implements ChangeListener {
+public class SetDaLiJeIzvodjacController implements ChangeListener {
     private TableView<EksperimentIzvodjacIzvDto> tvEksperimentIzvodjacIzvodjenje;
     private TableView<IstrazivacDto> tvIstrazivac;
 
-    public SetIzvodjacEkspIzvodjenjeController(TableView<IstrazivacDto> tvIstrazivac, TableView<EksperimentIzvodjacIzvDto> tvEksperimentIzvodjacIzvodjenje) {
+    public SetDaLiJeIzvodjacController(TableView<IstrazivacDto> tvIstrazivac, TableView<EksperimentIzvodjacIzvDto> tvEksperimentIzvodjacIzvodjenje) {
         this.tvEksperimentIzvodjacIzvodjenje =  tvEksperimentIzvodjacIzvodjenje;
         this.tvIstrazivac = tvIstrazivac;
     }
@@ -33,11 +33,12 @@ public class SetIzvodjacEkspIzvodjenjeController implements ChangeListener {
             }
 
             if (selektovaniIstrazivac.getDaLiJeIzvodjac().equalsIgnoreCase("Da")) {
-                String query = "select eksp.eksperiment_naziv, uloga, izv_eksp.datum, izv_eksp.status\n" +
-                        "from eksperiment eksp\n" +
-                        "         join izvodjenje_eksperimenta izv_eksp on eksp.eksperiment_id = izv_eksp.eksperiment_id\n" +
-                        "         join izvodjac_izvodjenje izv_izv on izv_eksp.eksperiment_id = izv_izv.eksperiment_id\n" +
-                        "where izv_izv.istrazivac_id = ?";
+                String query = "select eksperiment.eksperiment_naziv, uloga, izvodjenje_eksperimenta.datum, izvodjenje_eksperimenta.status\n" +
+                        "from eksperiment join izvodjenje_eksperimenta\n" +
+                        "on eksperiment.eksperiment_id = izvodjenje_eksperimenta.eksperiment_id\n" +
+                        "join izvodjac_izvodjenje\n" +
+                        "on izvodjenje_eksperimenta.izvodjenje_id = izvodjac_izvodjenje.izvodjenje_id\n" +
+                        "where izvodjac_izvodjenje.istrazivac_id = ?";
 
                 int indeks = tvIstrazivac.getSelectionModel().getSelectedItem().getIstrazivac_id();
                 PreparedStatement preparedStatement = Config.getConnection().prepareStatement(query);
@@ -48,10 +49,10 @@ public class SetIzvodjacEkspIzvodjenjeController implements ChangeListener {
                 ObservableList<EksperimentIzvodjacIzvDto> list = FXCollections.observableArrayList();
 
                 while(resultSet.next()){
-                    String nazivEksperimenta =  resultSet.getString("eksp.eksperiment_naziv");
+                    String nazivEksperimenta =  resultSet.getString("eksperiment.eksperiment_naziv");
                     String uloga = resultSet.getString("uloga");
-                    Date datum = resultSet.getDate("izv_eksp.datum");
-                    String status = resultSet.getString("izv_eksp.status");
+                    Date datum = resultSet.getDate("izvodjenje_eksperimenta.datum");
+                    String status = resultSet.getString("izvodjenje_eksperimenta.status");
 
                     EksperimentIzvodjacIzvDto eksperimentIzvodjacIzvDto =
                             new EksperimentIzvodjacIzvDto(nazivEksperimenta, uloga, datum, status);

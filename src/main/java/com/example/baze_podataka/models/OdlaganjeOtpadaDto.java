@@ -3,9 +3,9 @@ package com.example.baze_podataka.models;
 public class OdlaganjeOtpadaDto {
     private String lokacija;
     private int broj_odlaganja;
-    private int ukupna_kolicina;
+    private double ukupna_kolicina;
 
-    public OdlaganjeOtpadaDto(String lokacija, int broj_odlaganja, int ukupna_kolicina) {
+    public OdlaganjeOtpadaDto(String lokacija, int broj_odlaganja, double ukupna_kolicina) {
         this.lokacija = lokacija;
         this.broj_odlaganja = broj_odlaganja;
         this.ukupna_kolicina = ukupna_kolicina;
@@ -27,7 +27,7 @@ public class OdlaganjeOtpadaDto {
         this.broj_odlaganja = broj_odlaganja;
     }
 
-    public int getUkupna_kolicina() {
+    public double getUkupna_kolicina() {
         return ukupna_kolicina;
     }
 

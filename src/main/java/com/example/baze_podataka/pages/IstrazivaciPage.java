@@ -1,9 +1,9 @@
 package com.example.baze_podataka.pages;
 
 import com.example.baze_podataka.Config;
-import com.example.baze_podataka.controllers.SetEksTeoDizValuesController;
+import com.example.baze_podataka.controllers.SetDaLiJeDizajnerController;
 import com.example.baze_podataka.controllers.SetIstrazivacValuesController;
-import com.example.baze_podataka.controllers.SetIzvodjacEkspIzvodjenjeController;
+import com.example.baze_podataka.controllers.SetDaLiJeIzvodjacController;
 import com.example.baze_podataka.models.EksperimentIzvodjacIzvDto;
 import com.example.baze_podataka.models.EksperimentTeorijaDizajnerDto;
 import com.example.baze_podataka.models.IstrazivacDto;
@@ -64,10 +64,10 @@ public class IstrazivaciPage extends Stage {
         tcTeorijaOpis.setCellValueFactory(new PropertyValueFactory<>("teorijaOpis"));
 
         tvIstrazivac.getSelectionModel().selectedItemProperty()
-                .addListener(new SetEksTeoDizValuesController(tvIstrazivac, tvEksperimentEksTeoDiz));
+                .addListener(new SetDaLiJeDizajnerController(tvIstrazivac, tvEksperimentEksTeoDiz));
 
         tvIstrazivac.getSelectionModel().selectedItemProperty()
-                        .addListener(new SetIzvodjacEkspIzvodjenjeController(tvIstrazivac, tvEksperimentIzvodjacIzv));
+                        .addListener(new SetDaLiJeIzvodjacController(tvIstrazivac, tvEksperimentIzvodjacIzv));
 
 
         tvIstrazivac.getColumns().addAll(tcId, tcIme, tcPrezime, tcKlasifikacija, tcSpososobnosti, tcIzvodjac, tcDizajner);

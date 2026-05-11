@@ -46,11 +46,11 @@ public class IzmenaSesijePage {
             boolean success = updateSessionController.updateSession(Config.getConnection());
 
             if(success) {
-                System.out.println("Uspelo");
+                System.out.println("IZMENA SESIJE: Uspelo");
                 btnHomePageBack.fire();
             }
             else{
-                System.out.println("Greska");
+                System.out.println("IZMENA SESIJE: GRESKA");
             }
         });
 

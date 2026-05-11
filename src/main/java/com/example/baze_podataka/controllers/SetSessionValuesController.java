@@ -30,7 +30,11 @@ public class SetSessionValuesController implements ChangeListener {
             Eksperiment eksperiment = tvEksperimenti.getSelectionModel().getSelectedItem();
             if(eksperiment == null)return;
 
-            String query = "SELECT sesija_id, laboratorija_id, datum, vreme_pocetka, vreme_zavrsetka FROM sesija WHERE eksperiment_id = ?";
+            String query = "select sesija_id, laboratorija_id, s.datum, vreme_pocetka, vreme_zavrsetka from sesija s \n" +
+                    "join izvodjenje_eksperimenta ie \n" +
+                    "on s.izvodjenje_id = ie.izvodjenje_id " +
+                    "where eksperiment_id = ?";
+
             PreparedStatement preparedStatement = Config.getConnection().prepareStatement(query);
             preparedStatement.setInt(1, tvEksperimenti.getSelectionModel().getSelectedItem().getEksperimentId());
             ResultSet rs = preparedStatement.executeQuery();
@@ -46,7 +50,7 @@ public class SetSessionValuesController implements ChangeListener {
             }
             tvSesije.setItems(sesije);
         } catch (Exception e){
-            e.printStackTrace();
+            System.out.println("SET CONTROLLER " + e.getMessage());
         }
     }
 }

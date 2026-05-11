@@ -11,14 +11,14 @@ import java.sql.*;
 
 public class DodajOdlaganjePage {
     private Button btnOdlaganjeOtpadaBack = new Button("Nazad");
-    private ComboBox<String> cbSupstance = new ComboBox<>();
-    private ComboBox<String> cbSesije = new ComboBox<>();
+    private ComboBox<String> cbHemijskiOtpad = new  ComboBox<>();
     private ComboBox<String> cbLokacije = new ComboBox<>();
-    private TextField tfKolicina = new TextField();
+    private ComboBox<String> cbBezbednosniNivo = new ComboBox<>();
+    private TextField tfVrstaOdlaganja = new  TextField();
     private DodajOdlaganjePageController controller;
 
     public DodajOdlaganjePage() {
-        controller = new DodajOdlaganjePageController(cbSupstance, cbSesije, cbLokacije, tfKolicina);
+        controller = new DodajOdlaganjePageController(cbHemijskiOtpad, cbLokacije, cbBezbednosniNivo, tfVrstaOdlaganja);
         controller.popuniSveMenije();
     }
 
@@ -28,32 +28,36 @@ public class DodajOdlaganjePage {
 
         Label lblTitle = new Label("Registracija Odlaganja Otpada");
 
-        Label lblSup = new Label("Izaberite Supstancu:");
-        cbSupstance.setMaxWidth(Double.MAX_VALUE);
-
-        Label lblSes = new Label("Izaberite Sesiju:");
-        cbSesije.setMaxWidth(Double.MAX_VALUE);
-
-        Label lblKol = new Label("Količina (kg):");
-        tfKolicina.setPromptText("Unesite težinu...");
+        Label lblHemijskiOtpad = new Label("Hemijski Otpad");
+        cbHemijskiOtpad.setMaxWidth(Double.MAX_VALUE);
 
         Label lblLok = new Label("Izaberite Lokaciju:");
         cbLokacije.setMaxWidth(Double.MAX_VALUE);
+
+        Label lblBezbednost = new  Label("Bezednost:");
+        cbBezbednosniNivo.setMaxWidth(Double.MAX_VALUE);
+
+        Label lblVrsta = new Label("Vrsta:");
+        tfVrstaOdlaganja.setMaxWidth(Double.MAX_VALUE);
 
         Button btnRegistruj = new Button("Registruj odlaganje");
         btnRegistruj.setMinWidth(100);
         Label lblStatus = new Label("");
 
         btnRegistruj.setOnAction(e -> {
-            controller.registrujOdlaganje(Config.getConnection());
+            boolean status = controller.registrujOdlaganje(Config.getConnection());
+
+            if(status){
+                System.out.println("Uspelo");
+            }
         });
 
         layout.getChildren().addAll(
                 lblTitle,
-                lblSup, cbSupstance,
-                lblSes, cbSesije,
-                lblKol, tfKolicina,
+                lblHemijskiOtpad, cbHemijskiOtpad,
                 lblLok, cbLokacije,
+                lblBezbednost, cbBezbednosniNivo,
+                lblVrsta, tfVrstaOdlaganja,
                 btnRegistruj, lblStatus, btnOdlaganjeOtpadaBack
         );
 

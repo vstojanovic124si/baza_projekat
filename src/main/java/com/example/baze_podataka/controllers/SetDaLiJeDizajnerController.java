@@ -12,11 +12,11 @@ import javafx.scene.control.TableView;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class SetEksTeoDizValuesController implements ChangeListener {
+public class SetDaLiJeDizajnerController implements ChangeListener {
     private TableView<EksperimentTeorijaDizajnerDto> tvEksperimentEksTeoDiz;
     private TableView<IstrazivacDto> tvIstrazivac;
 
-    public SetEksTeoDizValuesController(TableView<IstrazivacDto> tvIstrazivac, TableView<EksperimentTeorijaDizajnerDto> tvEksperimentEksTeoDiz) {
+    public SetDaLiJeDizajnerController(TableView<IstrazivacDto> tvIstrazivac, TableView<EksperimentTeorijaDizajnerDto> tvEksperimentEksTeoDiz) {
         this.tvEksperimentEksTeoDiz =  tvEksperimentEksTeoDiz;
         this.tvIstrazivac = tvIstrazivac;
     }

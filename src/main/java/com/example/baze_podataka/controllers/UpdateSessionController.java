@@ -24,62 +24,42 @@ public class UpdateSessionController {
         String start = tfStart.getText();
         String end = tfEnd.getText();
 
-        try{
-            if (!proveriLaboratoriju(connection, labIdText)) {
-                System.out.println("Greška: Laboratorija sa ID " + labIdText + " ne postoji.");
-                return false;
-            }
-
+        try {
             Time startTime = Time.valueOf(start);
             Time endTime = Time.valueOf(end);
+
             if (!endTime.after(startTime)) {
                 System.out.println("Greška: Vreme završetka mora biti posle vremena početka.");
                 return false;
             }
 
-            if (postojiPreklapanje(connection, Integer.parseInt(labIdText), datum, startTime, endTime)) {
-                System.out.println("Greška: Termini se preklapaju sa postojećom sesijom u toj laboratoriji.");
-                return false;
-            }
-
-            return izvrsiUpdate(connection, Integer.parseInt(labIdText), datum, startTime, endTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+            return izvrsiUpdateProcedurom(connection, sessionId, Integer.parseInt(labIdText), datum, startTime, endTime);
         }
+        catch (Exception e){
+            System.out.println("UPDATE CONTROLLER " +  e.getMessage());
+        }
+        return false;
     }
 
-    private boolean proveriLaboratoriju(Connection conn, String labId) throws SQLException {
-        String query = "SELECT COUNT(*) FROM laboratorija WHERE laboratorija_id = ?";
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setInt(1, Integer.parseInt(labId));
-        ResultSet rs = ps.executeQuery();
-        return rs.next() && rs.getInt(1) > 0;
-    }
+    private boolean izvrsiUpdateProcedurom(Connection conn, int sesijaId, int labId, String datum, Time start, Time end) throws SQLException {
+        String sql = "{CALL proc_update_session(?, ?, ?, ?, ?)}";
+        CallableStatement statement = conn.prepareCall(sql);
+        statement.setInt(1, sesijaId);
+        statement.setInt(2, labId);
+        statement.setString(3, datum);
+        statement.setTime(4, start);
+        statement.setTime(5, end);
+        boolean hasResults = statement.execute();
 
-    private boolean postojiPreklapanje(Connection conn, int labId, String datum, Time start, Time end) throws SQLException {
-
-        String query = "SELECT COUNT(*) FROM sesija WHERE laboratorija_id = ? AND datum = ? AND sesija_id != ? " +
-                "AND NOT (vreme_pocetka >= ? OR vreme_zavrsetka <= ?)";
-        PreparedStatement ps2 = conn.prepareStatement(query);
-        ps2.setInt(1, labId);
-        ps2.setString(2, datum);
-        ps2.setInt(3, sessionId);
-        ps2.setTime(4, end);
-        ps2.setTime(5, start);
-
-        ResultSet rs = ps2.executeQuery();
-        return rs.next() && rs.getInt(1) > 0;
-    }
-
-    private boolean izvrsiUpdate(Connection conn, int labId, String datum, Time start, Time end) throws SQLException {
-        String query = "UPDATE sesija SET laboratorija_id = ?, datum = ?, vreme_pocetka = ?, vreme_zavrsetka = ? WHERE sesija_id = ?";
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setInt(1, labId);
-        ps.setString(2, datum);
-        ps.setTime(3, start);
-        ps.setTime(4, end);
-        ps.setInt(5, sessionId);
-        return ps.executeUpdate() > 0;
+        if (hasResults) {
+            try (ResultSet rs = statement.getResultSet()) {
+                if (rs.next()) {
+                    String status = rs.getString("status");
+                    System.out.println("Status iz baze: " + status);
+                    return "USPESNO".equals(status);
+                }
+            }
+        }
+        return false;
     }
 }

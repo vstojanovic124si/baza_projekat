@@ -8,70 +8,91 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class DodajOdlaganjePageController {
-    private ComboBox<String> cbSupstance;
-    private ComboBox<String> cbSesije;
+    private ComboBox<String> cbHemijskiOtpad;
     private ComboBox<String> cbLokacije;
-    private TextField tfKolicina;
+    private ComboBox<String> cbBezbednosniNivo;
+    private TextField tfVrstaOdlaganja;
 
-    public DodajOdlaganjePageController(ComboBox<String> cbSupstance, ComboBox<String> cbSesije, ComboBox<String> cbLokacije, TextField tfKolicina) {
-        this.cbSupstance = cbSupstance;
-        this.cbSesije = cbSesije;
+    public DodajOdlaganjePageController(ComboBox<String> cbHemijskiOtpad,
+                                        ComboBox<String> cbLokacije,
+                                        ComboBox<String> cbBezbednosniNivo,
+                                        TextField tfVrstaOdlaganja) {
+        this.cbHemijskiOtpad = cbHemijskiOtpad;
         this.cbLokacije = cbLokacije;
-        this.tfKolicina = tfKolicina;
+        this.cbBezbednosniNivo = cbBezbednosniNivo;
+        this.tfVrstaOdlaganja = tfVrstaOdlaganja;
     }
 
     public void popuniSveMenije() {
         try {
-            Statement st = Config.getConnection().createStatement();
+            cbHemijskiOtpad.getItems().clear();
+            cbLokacije.getItems().clear();
+            cbBezbednosniNivo.getItems().clear();
 
-            ResultSet rsSup = st.executeQuery("SELECT supstanca_id, supstanca_naziv FROM hemijska_supstanca");
-            while (rsSup.next()) {
-                cbSupstance.getItems().add(rsSup.getInt("supstanca_id") + " - " + rsSup.getString("supstanca_naziv"));
-            }
+            cbBezbednosniNivo.getItems().addAll("Visok", "Srednji", "Nizak");
+            Connection conn = Config.getConnection();
 
-            ResultSet rsSes = st.executeQuery("SELECT sesija_id FROM sesija");
-            while (rsSes.next()) {
-                cbSesije.getItems().add(String.valueOf(rsSes.getInt("sesija_id")));
+            String query = "SELECT ho.otpad_id, s.supstanca_naziv " +
+                    "FROM hemijski_otpad ho " +
+                    "JOIN hemijska_supstanca s ON ho.supstanca_id = s.supstanca_id " +
+                    "WHERE ho.otpad_id NOT IN (SELECT otpad_id FROM odlaganje_otpada)";
+
+            Statement st = conn.createStatement();
+            ResultSet rsHemijskiOtpad = st.executeQuery(query);
+
+            while (rsHemijskiOtpad.next()) {
+                int id = rsHemijskiOtpad.getInt("otpad_id");
+                String naziv = rsHemijskiOtpad.getString("supstanca_naziv");
+                cbHemijskiOtpad.getItems().add(id + " - " + naziv);
             }
 
             ResultSet rsLok = st.executeQuery("SELECT DISTINCT lokacija FROM odlaganje_otpada");
+
             while (rsLok.next()) {
                 cbLokacije.getItems().add(rsLok.getString("lokacija"));
             }
-            cbLokacije.getSelectionModel().select(0);
-            cbSesije.getSelectionModel().select(0);
-            cbSupstance.getSelectionModel().select(0);
+
+            if (!cbLokacije.getItems().isEmpty()) {
+                cbLokacije.getSelectionModel().select(0);
+            }
+            if(!cbHemijskiOtpad.getItems().isEmpty()) {
+                cbHemijskiOtpad.getSelectionModel().select(0);
+            }
+
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Greška pri učitavanju podataka: " + e.getMessage());
         }
     }
 
-    public void registrujOdlaganje(Connection connection){
+
+    public boolean registrujOdlaganje(Connection connection){
         try {
-            int supstanca_id = Integer.parseInt(cbSupstance.getValue().split(" ")[0]);
-            int sesija_id = Integer.parseInt(cbSesije.getValue());
+            int otpad_id = Integer.parseInt(cbHemijskiOtpad.getValue().split(" - ")[0]);
             String lokacija =  cbLokacije.getValue();
-            double kolicina = Double.parseDouble(tfKolicina.getText());
+            String bezbednost = cbBezbednosniNivo.getValue();
+            String vrstaOdlaganja = tfVrstaOdlaganja.getText();
 
-            PreparedStatement ps = connection.prepareStatement(
-                    "CALL Procedura_RegistrujOdlaganje(?, ?, ?, ?)"
-            );
+            String query = "INSERT INTO odlaganje_otpada (otpad_id, lokacija, datum_odlaganja, vreme_odlaganja, bezbednosni_nivo, vrsta_odlaganja)\n" +
+                    "VALUES (?, ?, ?, ?, ?, ?)";
 
-            ps.setInt(1, supstanca_id);
-            ps.setInt(2, sesija_id);
-            ps.setDouble(3, kolicina);
-            ps.setString(4, lokacija);
-
-            ResultSet rs = ps.executeQuery();
-
-            if(rs.next()){
-                System.out.println(rs.getString("Status"));
-            }
+            PreparedStatement st = connection.prepareStatement(query);
+            st.setInt(1, otpad_id);
+            st.setString(2, lokacija);
+            st.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+            st.setTime(4, java.sql.Time.valueOf(LocalTime.now()));
+            st.setString(5, bezbednost);
+            st.setString(6, vrstaOdlaganja);
+            int status = st.executeUpdate();
+            return status > 0;
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        return false;
     }
 }
