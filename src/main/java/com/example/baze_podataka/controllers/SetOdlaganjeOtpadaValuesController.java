@@ -41,22 +41,25 @@ public class SetOdlaganjeOtpadaValuesController {
     }
 
     private void createViewQuery(Connection connection) {
-        try{
-            String query = "CREATE OR REPLACE VIEW View_KriticanOtpadPoLokacijama AS\n" +
-                    "SELECT\n" +
-                    "    oo.lokacija AS Lokacija_Odlaganja,\n" +
-                    "    COUNT(oo.otpad_id) AS Broj_Odlaganja,\n" +
-                    "    CAST(SUM(ho.kolicina) AS DECIMAL(10,2)) AS Ukupna_Kolicina_Kg\n" +
-                    "FROM odlaganje_otpada oo\n" +
-                    "         JOIN hemijski_otpad ho ON oo.otpad_id = ho.otpad_id\n" +
-                    "         JOIN hemijska_supstanca s ON ho.supstanca_id = s.supstanca_id\n" +
-                    "WHERE oo.bezbednosni_nivo <> 'Nizak'\n" +
-                    "GROUP BY oo.lokacija\n" +
-                    "HAVING SUM(ho.kolicina) > 5.00;";
-            Statement statement = connection.createStatement();
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage());
+        String query = "CREATE OR REPLACE VIEW View_KriticanOtpadPoLokacijama AS\n" +
+                "SELECT\n" +
+                "    oo.lokacija AS Lokacija_Odlaganja,\n" +
+                "    COUNT(oo.otpad_id) AS Broj_Odlaganja,\n" +
+                "    CAST(SUM(ho.kolicina) AS DECIMAL(10,2)) AS Ukupna_Kolicina_Kg\n" +
+                "FROM odlaganje_otpada oo\n" +
+                "         JOIN hemijski_otpad ho ON oo.otpad_id = ho.otpad_id\n" +
+                "         JOIN hemijska_supstanca s ON ho.supstanca_id = s.supstanca_id\n" +
+                "WHERE oo.bezbednosni_nivo <> 'Nizak'\n" +
+                "GROUP BY oo.lokacija\n" +
+                "HAVING SUM(ho.kolicina) > 5.00;";
+
+        try (Statement statement = connection.createStatement()) {
+
+            statement.execute(query);
+            System.out.println("View 'View_KriticanOtpadPoLokacijama' successfully created.");
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
