@@ -62,7 +62,7 @@ public class Eksperiment {
 
     private String runQuery(){
         try {
-            String query = "SELECT naziv_vrste_eksperimenta FROM vrsta_eksperimenta WHERE vrsta_eksperimenta_id = ?";
+            String query = "SELECT naziv_vrste_eksperimenta FROM vrsta_eksperimenta WHERE vrsta_experimenta_id = ?";
             PreparedStatement preparedStatement = Config.getConnection().prepareStatement(query);
             preparedStatement.setInt(1, vrstaId);
             ResultSet rs =preparedStatement.executeQuery();

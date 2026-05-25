@@ -1,6 +1,7 @@
 package com.example.baze_podataka.pages;
 
 import com.example.baze_podataka.Config;
+import com.example.baze_podataka.controllers.ButtonLaboratorijaController;
 import com.example.baze_podataka.controllers.SetEksperimentValuesController;
 import com.example.baze_podataka.controllers.SetSessionValuesController;
 import com.example.baze_podataka.models.Eksperiment;
@@ -130,6 +131,8 @@ public class HomePage extends Stage {
                 stage.setTitle("Home page");
             });
         });
+
+        btnPrikazLaboratorija.setOnAction(new ButtonLaboratorijaController());
 
 
         root.setCenter(this.tvEksperiment);

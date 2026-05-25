@@ -54,6 +54,7 @@ public class SetOdlaganjeOtpadaValuesController {
                     "GROUP BY oo.lokacija\n" +
                     "HAVING SUM(ho.kolicina) > 5.00;";
             Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
         }
         catch (Exception e){
             System.out.println(e.getMessage());
