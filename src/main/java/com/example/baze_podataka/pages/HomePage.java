@@ -58,6 +58,8 @@ public class HomePage extends Stage {
         tvEksperiment.getColumns().addAll(tcId, tcNaziv, tcCiljeviIstrazivanja, tcVrstaEksperimenta);
         tvSesija.getColumns().addAll(tcSessionId, tcLaboratoryId, tcSesijaDatum, tcSessionVremePocetka, tcSessionVremeZavrsetka);
 
+        tvEksperiment.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tvSesija.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         VBox vb1 = new VBox(10, this.btnIzmenaSesije, this.btnPrikazLaboratorija, btnPrikazIstrazivaca, btnOdlaganjeOtpada);
         vb1.setAlignment(Pos.CENTER);
@@ -139,6 +141,6 @@ public class HomePage extends Stage {
         root.setRight(this.tvSesija);
         root.setLeft(vb1);
         this.setTitle("Home page");
-        this.setScene(new Scene(root, 1000, 800));
+        this.setScene(new Scene(root, 1600, 800));
     }
 }

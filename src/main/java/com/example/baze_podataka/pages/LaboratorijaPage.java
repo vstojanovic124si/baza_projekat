@@ -38,6 +38,7 @@ public class LaboratorijaPage extends Stage {
         tvLaboratorija.getColumns().add(tcLaboratorijaId);
         tvLaboratorija.getColumns().add(tcLaboratoryName);
         tvLaboratorija.getColumns().add(tcLaboratoryLocation);
+        tvLaboratorija.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn<HemijskaSupstancaKolicina, Integer> tcSupstancaId = new TableColumn<>("ID supstance");
         TableColumn<HemijskaSupstancaKolicina, String> tcSupstancaNaziv = new TableColumn<>("Naziv supstance");
@@ -53,6 +54,7 @@ public class LaboratorijaPage extends Stage {
         tvHemijskaSupstanca.getColumns().add(tcSupstancaNaziv);
         tvHemijskaSupstanca.getColumns().add(tcSupstancaKolicina);
         tvHemijskaSupstanca.getColumns().add(tcStatusSupstance);
+        tvHemijskaSupstanca.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         TableColumn<Alat, Integer> tcAlatId = new TableColumn<>("ID alata");
         TableColumn<Alat, String> tcAlatVrsta = new TableColumn<>("Vrsta alata");
@@ -62,6 +64,7 @@ public class LaboratorijaPage extends Stage {
 
         tvAlati.getColumns().add(tcAlatId);
         tvAlati.getColumns().add(tcAlatVrsta);
+        tvAlati.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         SetLaboratorijaValuesController setLaboratorijaValuesController = new SetLaboratorijaValuesController(tvLaboratorija);
 
@@ -85,7 +88,7 @@ public class LaboratorijaPage extends Stage {
         root.setRight(tvAlati);
         this.setTitle("Laboratorije");
 
-        this.setScene(new Scene(root, 600, 600));
+        this.setScene(new Scene(root, 1000, 600));
     }
 
 
