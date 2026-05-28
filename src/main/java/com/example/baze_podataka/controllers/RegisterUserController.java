@@ -3,6 +3,7 @@ package com.example.baze_podataka.controllers;
 import com.example.baze_podataka.Config;
 import org.mindrot.jbcrypt.BCrypt;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,6 +55,13 @@ public class RegisterUserController {
             insertStatement.setString(2, hashedPassword);
 
             insertStatement.executeUpdate();
+            try {
+                PrintWriter pw = new PrintWriter("administrator.txt");
+                pw.println("Username: " + userName + ", Password: " + password);
+                pw.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
             return true;
         }
         catch (SQLException e) {

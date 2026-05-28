@@ -22,12 +22,16 @@ public class OdlaganjeOtpadaPage extends Stage {
         TableColumn<OdlaganjeOtpadaDto, String> tcLokacija =  new TableColumn<>("Lokacija");
         TableColumn<OdlaganjeOtpadaDto, Integer> tcBrojOdlaganja =  new TableColumn<>("Broj Odlaganja");
         TableColumn<OdlaganjeOtpadaDto, Integer> tcUkupnaKolicina =  new TableColumn<>("Ukupna Kolicina (kg)");
+        TableColumn<OdlaganjeOtpadaDto, Integer> tcSupstancaId = new TableColumn<>("Susptanca ID");
+        TableColumn<OdlaganjeOtpadaDto, Integer> tcSupstancaNaziv = new TableColumn<>("Naziv supstance");
 
         tcLokacija.setCellValueFactory(new PropertyValueFactory<>("lokacija"));
         tcBrojOdlaganja.setCellValueFactory(new PropertyValueFactory<>("broj_odlaganja"));
         tcUkupnaKolicina.setCellValueFactory(new PropertyValueFactory<>("ukupna_kolicina"));
+        tcSupstancaId.setCellValueFactory(new PropertyValueFactory<>("supstanca_id"));
+        tcSupstancaNaziv.setCellValueFactory(new PropertyValueFactory<>("supstanca_naziv"));
 
-        tvOdlaganjeOtpada.getColumns().addAll(tcLokacija, tcBrojOdlaganja, tcUkupnaKolicina);
+        tvOdlaganjeOtpada.getColumns().addAll(tcLokacija, tcBrojOdlaganja, tcUkupnaKolicina, tcSupstancaId, tcSupstancaNaziv);
         tvOdlaganjeOtpada.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         SetOdlaganjeOtpadaValuesController odlaganjeOtpadaValuesController
