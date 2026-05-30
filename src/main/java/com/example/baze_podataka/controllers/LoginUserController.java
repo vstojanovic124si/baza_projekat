@@ -21,11 +21,9 @@ public class LoginUserController {
 
     private boolean runQuery(Connection connection, String userName, String password) {
         try {
-            String query =
-                    "SELECT sifra FROM administrator WHERE username = ?";
+            String query = "SELECT sifra FROM administrator WHERE username = ?";
 
-            PreparedStatement preparedStatement =
-                    connection.prepareStatement(query);
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setString(1, userName);
 

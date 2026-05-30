@@ -71,7 +71,7 @@ public class Eksperiment {
                 return naziv;
             }
         } catch (Exception e){
-            System.out.println("Greska");
+            System.out.println("Eksperiment: " + e.getMessage());
         }
         return null;
     }

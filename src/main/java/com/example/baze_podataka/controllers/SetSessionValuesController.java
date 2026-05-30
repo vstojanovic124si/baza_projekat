@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 
 import java.sql.*;
-import java.util.EventListener;
 
 public class SetSessionValuesController implements ChangeListener {
     private TableView<Eksperiment> tvEksperimenti;
@@ -21,31 +20,37 @@ public class SetSessionValuesController implements ChangeListener {
         this.tvSesije = tvSesije;
     }
 
-    public void runQuery(Connection connection) {
-
-    }
-
     @Override
     public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+        runQuery();
+    }
+
+    private void runQuery(){
         try {
-            String query = "SELECT * FROM sesija WHERE eksperiment_id = ?";
+            Eksperiment eksperiment = tvEksperimenti.getSelectionModel().getSelectedItem();
+            if(eksperiment == null)return;
+
+            String query = "select sesija_id, laboratorija_id, s.datum, vreme_pocetka, vreme_zavrsetka from sesija s \n" +
+                    "join izvodjenje_eksperimenta ie \n" +
+                    "on s.izvodjenje_id = ie.izvodjenje_id " +
+                    "where eksperiment_id = ?";
+
             PreparedStatement preparedStatement = Config.getConnection().prepareStatement(query);
             preparedStatement.setInt(1, tvEksperimenti.getSelectionModel().getSelectedItem().getEksperimentId());
             ResultSet rs = preparedStatement.executeQuery();
             ObservableList<SessionDto> sesije = FXCollections.observableArrayList();
             while(rs.next()){
                 int sesija_id = rs.getInt("sesija_id");
-                int eksperiment_id = rs.getInt("eksperiment_id");
                 int laboratorija_id = rs.getInt("laboratorija_id");
                 Date datum = rs.getDate("datum");
                 Time vremePocetka = rs.getTime("vreme_pocetka");
                 Time vremeZavrsetka = rs.getTime("vreme_zavrsetka");
-                SessionDto sesija = new SessionDto(sesija_id, datum, vremePocetka, vremeZavrsetka);
+                SessionDto sesija = new SessionDto(sesija_id, datum, vremePocetka, vremeZavrsetka, laboratorija_id);
                 sesije.add(sesija);
             }
             tvSesije.setItems(sesije);
         } catch (Exception e){
-            e.printStackTrace();
+            System.out.println("SET CONTROLLER " + e.getMessage());
         }
     }
 }
